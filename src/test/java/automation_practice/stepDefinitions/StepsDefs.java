@@ -2,6 +2,7 @@ package automation_practice.stepDefinitions;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -24,10 +25,9 @@ public class StepsDefs {
         driver = new ChromeDriver();
     }
 
-    @Given("User is on scores-fixtures page")
-    public void user_is_on_scores_fixtures_page() {
-        driver.get("https://www.bbc.co.uk/sport/football/scores-fixtures");
-        driver.manage().window().maximize();
+    @Given("I open home page")
+    public void open_home_page() {
+        driver.get("http://automationpractice.com/index.php");
         String Title = driver.getTitle();
         System.out.println("page title" + Title);
     }
@@ -82,15 +82,14 @@ public class StepsDefs {
 
     @Given("I navigate to login page")
     public void i_navigate_to_login_page() throws InterruptedException {
-        driver.findElement(By.id("idcta-username")).click();
-        Thread.sleep(3000);
+        driver.findElement(By.linkText("Sign in")).click();
     }
 
-    @When("I attempt to login with correct {string} and incorrect {string}")
+    @When("I attempt to login with {string} and {string}")
     public void i_attempt_to_login_with_correct_and_incorrect(String userName, String pwd) {
-        driver.findElement(By.id("user-identifier-input")).sendKeys(userName);
-        driver.findElement(By.id("password-input")).sendKeys(pwd);
-        driver.findElement(By.id("submit-button")).click();
+        driver.findElement(By.id("email")).sendKeys(userName);
+        driver.findElement(By.id("passwd")).sendKeys(pwd);
+        driver.findElement(By.id("SubmitLogin")).click();
 
     }
 
@@ -100,13 +99,7 @@ public class StepsDefs {
         Assert.assertTrue(ActErrMsg.contains(errMsg));
     }
 
-    @When("I attempt to login with incorrect {string} and correct {string}")
-    public void i_attempt_to_login_with_incorrect_and_correct(String userName, String pwd) {
-        driver.findElement(By.id("user-identifier-input")).sendKeys(userName);
-        driver.findElement(By.id("password-input")).sendKeys(pwd);
-        driver.findElement(By.id("submit-button")).click();
 
-    }
 
     @Then("my login attempt should fail with wrong username {string}")
     public void my_login_attempt_should_fail_with_wrong_username(String errMsg) {
@@ -115,22 +108,48 @@ public class StepsDefs {
 
     }
 
+    @Then("I should see error {string}")
+    public void see_error_msg(String errMsg) {
+        String ActErrMsg = driver.findElement(By.xpath("//body")).getText();
+        Assert.assertTrue(ActErrMsg.contains(errMsg));
+
+    }
+
+
+
+
+
+
+    @When("I search for phrase {string}")
+    public void iSearchForPhrase(String searchPhrase) throws Throwable {
+
+        driver.findElement(By.xpath("//input[@class='search_query form-control ac_input']")).sendKeys(searchPhrase);
+
+    }
+
+    @And("I click on search icon")
+    public void iClickOnSearchIcon() throws Throwable {
+        driver.findElement(By.xpath("//form[@id='searchbox']//button[@type='submit']")).click();
+    }
+
+
+    @Then("I can see numbers of results equals to {string}")
+    public void iCanSeeNumbersOfResultsEqualsTo(String expectedCountOfResults) throws Throwable {
+
+        String actualCountOfResults = driver.findElement(By.xpath("//span[@class='heading-counter']")).getText().replaceAll("[^\\d]", "");
+        Assert.assertEquals(actualCountOfResults, expectedCountOfResults);
+
+    }
+
+
+
+
     @After
     public void tearDown() {
         driver.close();
     }
 
-    @Given("I open home page")
-    public void iOpenHomePage() throws Throwable {
-        //ARRANGE//
-        final String expectedPageURL = "http://automationpractice.com/index.php";
 
-        //ACT//
-//        driver.getDriver().get(HOME_URL);
-
-        //ASSERT//
-//        Assert.assertEquals(DriverFactory.getDriver().getCurrentUrl(), expectedPageURL, ContextInjection._21VOID);
-    }
 
 
 }
