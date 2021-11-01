@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 
 @CucumberOptions(
-        tags = "@s",
+        tags = "",
         plugin = {"pretty","html:target/cucumber-report",
                 "timeline:test-output-thread/"}
 )

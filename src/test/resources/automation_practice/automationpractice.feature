@@ -24,13 +24,20 @@ Feature: A a user I would like to see results of searching phrase
       | T-shirts      | 1                |
       | Blouse        | 1                |
       | Printed Dress | 5                |
-      | !@#$%^        | 0                |
-
-
+    
   @srinu
   Scenario:As a user I would like to use search box with no data
 
     When I search for phrase ""
     And I click on search icon
     Then I should see error "Please enter a search keyword"
+
+
+  @srinu
+  Scenario:As a user I would like to use search box with no data
+
+    When I search for phrase "!@#$%^"
+    And I click on search icon
+    Then I should see error "No results were found for your"
+
 
